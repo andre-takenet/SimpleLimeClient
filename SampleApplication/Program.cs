@@ -18,13 +18,10 @@ namespace SampleApplication
                             //    o.Messages.InputQueueSize = 10;
                             //})
                             .AddReceiver(new DefaultMessageReceiver(), forMimeType: MediaTypes.PlainText);
-
             var execution = client.StartAsync().Result;
 
             Console.WriteLine("Press any key to stop");
-
             var endingTask = Task.WhenAny(execution, WaitKeyAsync()).Result;
-
             if (endingTask != execution)
             {
                 client.StopAsync().Wait();
