@@ -57,7 +57,7 @@ namespace Iris.Sdk
         /// <param name="receiver"></param>
         /// <param name="forMimeType">When not informed, only receives messages which no 'typed' receiver is registered</param>
         /// <returns></returns>
-        public IrisClient AddReceiver(IMessageReceiver receiver, MediaType forMimeType = null)
+        public IrisClient AddMessageReceiver(IMessageReceiver receiver, MediaType forMimeType = null)
         {
             AddReceiver(forMimeType, receiver);
             return this;

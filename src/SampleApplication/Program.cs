@@ -17,7 +17,7 @@ namespace SampleApplication
                             //    o.Connection.PingInterval = TimeSpan.FromMinutes(5);
                             //    o.Messages.InputQueueSize = 10;
                             //})
-                            .AddReceiver(new DefaultMessageReceiver(), forMimeType: MediaTypes.PlainText);
+                            .AddMessageReceiver(new DefaultMessageReceiver(), forMimeType: MediaTypes.PlainText);
             var execution = client.StartAsync().Result;
 
             Console.WriteLine("Press any key to stop");
