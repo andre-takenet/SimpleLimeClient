@@ -1,4 +1,5 @@
-﻿using Lime.Protocol;
+﻿using Lime.Messaging.Resources;
+using Lime.Protocol;
 using Lime.Protocol.Client;
 using Lime.Protocol.Network;
 using Lime.Protocol.Security;
@@ -81,8 +82,16 @@ namespace Iris.Sdk
 
             if (session.State != SessionState.Established) throw new Exception($"Could not connect: {session.Reason.Description} (code: {session.Reason.Code})");
 
+            await clientChannel.SetResourceAsync(
+                LimeUri.Parse(UriTemplates.PRESENCE),
+                new Presence { RoutingRule = RoutingRule.Identity },
+                CancellationToken.None);
+
+            StartReceiving();
+
             return running.Task;
         }
+
 
         public async Task StopAsync()
         {
@@ -91,7 +100,8 @@ namespace Iris.Sdk
                 if (clientChannel?.State == SessionState.Established)
                 {
                     await clientChannel.SendFinishingSessionAsync();
-                } else
+                }
+                else
                 {
                     await clientChannel.Transport.CloseAsync(CancellationToken.None);
                 }
@@ -102,6 +112,11 @@ namespace Iris.Sdk
             {
                 running.SetException(e);
             }
+        }
+
+        private void StartReceiving()
+        {
+            throw new NotImplementedException();
         }
 
         async Task<ClientChannel> CreateAndOpenAsync()

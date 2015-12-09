@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Lime.Messaging, Version=0.2.328.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Lime.Messaging.0.2.328\lib\net45\Lime.Messaging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Lime.Protocol, Version=0.2.328.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Lime.Protocol.0.2.328\lib\net45\Lime.Protocol.dll</HintPath>
       <Private>True</Private>
