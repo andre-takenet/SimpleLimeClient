@@ -1,14 +1,14 @@
-﻿using Lime.Messaging.Resources;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Lime.Messaging.Resources;
 using Lime.Protocol;
 using Lime.Protocol.Client;
 using Lime.Protocol.Network;
 using Lime.Protocol.Security;
 using Lime.Transport.Tcp;
-using System;
-using System.Collections.Generic;
-using System.Net.Sockets;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Iris.Sdk
 {
@@ -114,9 +114,25 @@ namespace Iris.Sdk
             }
         }
 
-        private void StartReceiving()
+        void StartReceiving()
         {
-            throw new NotImplementedException();
+            Task.Run(ProcessIncomingMessages);
+        }
+
+        async Task ProcessIncomingMessages()
+        {
+            while (running.Task.Status == TaskStatus.Running)
+            {
+                var message = await clientChannel.ReceiveMessageAsync(CancellationToken.None);
+                IList<IMessageReceiver> mimeTypeReceivers = null;
+                if (receivers.TryGetValue(message.Type, out mimeTypeReceivers) ||
+                    receivers.TryGetValue(MediaTypes.Any, out mimeTypeReceivers) ||
+                    receivers.TryGetValue(defaultReceiverMediaType, out mimeTypeReceivers))
+                {
+                    await Task.WhenAll(
+                        mimeTypeReceivers.Select(r => r.ReceiveAsync(message)));
+                }
+            }
         }
 
         async Task<ClientChannel> CreateAndOpenAsync()
