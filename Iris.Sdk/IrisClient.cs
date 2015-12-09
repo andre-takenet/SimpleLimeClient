@@ -24,6 +24,7 @@ namespace Iris.Sdk
         string password;
         string accessKey;
         IClientChannel clientChannel;
+        IMessageSender messageSender;
 
         IrisClient()
         {
@@ -82,6 +83,7 @@ namespace Iris.Sdk
 
             if (session.State != SessionState.Established) throw new Exception($"Could not connect: {session.Reason.Description} (code: {session.Reason.Code})");
 
+            messageSender = new MessageSenderWrapper(clientChannel);
             await clientChannel.SetResourceAsync(
                 LimeUri.Parse(UriTemplates.PRESENCE),
                 new Presence { RoutingRule = RoutingRule.Identity },
@@ -130,9 +132,19 @@ namespace Iris.Sdk
                     receivers.TryGetValue(defaultReceiverMediaType, out mimeTypeReceivers))
                 {
                     await Task.WhenAll(
-                        mimeTypeReceivers.Select(r => r.ReceiveAsync(message)));
+                        mimeTypeReceivers.Select(r => CallMessageReceiver(r, message)));
                 }
             }
+        }
+
+        Task CallMessageReceiver(IMessageReceiver receiver, Message message)
+        {
+            if (receiver is MessageReceiverBase)
+            {
+                ((MessageReceiverBase)receiver).Sender = messageSender;
+            }
+
+            return receiver.ReceiveAsync(message);
         }
 
         async Task<ClientChannel> CreateAndOpenAsync()

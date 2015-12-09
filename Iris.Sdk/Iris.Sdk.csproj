@@ -61,6 +61,7 @@
     <Compile Include="IrisClient.cs" />
     <Compile Include="MediaTypes.cs" />
     <Compile Include="MessageReceiverBase.cs" />
+    <Compile Include="MessageSenderWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
