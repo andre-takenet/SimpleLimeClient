@@ -20,7 +20,7 @@ class DefaultMessageReceiver : MessageReceiverBase
     public async override Task ReceiveAsync(Message message)
     {
         Trace.WriteLine(message.Content.ToString());
-        await Sender.SendMessageAsync("Thanks for you message");
+        await Sender.SendMessageAsync("Thanks for you message", message.From);
     }
 }
 ```
