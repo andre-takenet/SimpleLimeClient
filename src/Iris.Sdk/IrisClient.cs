@@ -16,6 +16,8 @@ namespace Iris.Sdk
     {
         static readonly MediaType defaultReceiverMediaType = new MediaType("null", "null");
 
+        public IMessageSender MessageSender { get; private set; }
+
         readonly Uri endpoint;
         readonly IDictionary<MediaType, IList<IMessageReceiver>> receivers;
         readonly TaskCompletionSource<bool> running;
@@ -24,7 +26,6 @@ namespace Iris.Sdk
         string password;
         string accessKey;
         IClientChannel clientChannel;
-        IMessageSender messageSender;
 
         IrisClient()
         {
@@ -83,7 +84,7 @@ namespace Iris.Sdk
 
             if (session.State != SessionState.Established) throw new Exception($"Could not connect: {session.Reason.Description} (code: {session.Reason.Code})");
 
-            messageSender = new MessageSenderWrapper(clientChannel);
+            MessageSender = new MessageSenderWrapper(clientChannel);
             await clientChannel.SetResourceAsync(
                 LimeUri.Parse(UriTemplates.PRESENCE),
                 new Presence { RoutingRule = RoutingRule.Identity },
@@ -141,7 +142,7 @@ namespace Iris.Sdk
         {
             if (receiver is MessageReceiverBase)
             {
-                ((MessageReceiverBase)receiver).Sender = messageSender;
+                ((MessageReceiverBase)receiver).Sender = MessageSender;
             }
 
             return receiver.ReceiveAsync(message);

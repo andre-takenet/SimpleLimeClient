@@ -20,6 +20,8 @@ namespace SampleApplication
                             .AddMessageReceiver(new DefaultMessageReceiver(), forMimeType: MediaTypes.PlainText);
             var execution = client.StartAsync().Result;
 
+            client.SendMessageAsync("Hello, world", "user").Wait();
+
             Console.WriteLine("Press any key to stop");
             var endingTask = Task.WhenAny(execution, WaitKeyAsync()).Result;
             if (endingTask != execution)

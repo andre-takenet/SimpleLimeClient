@@ -59,6 +59,7 @@
     <Compile Include="IMessageReceiver.cs" />
     <Compile Include="IMessageSender.cs" />
     <Compile Include="IrisClient.cs" />
+    <Compile Include="IrisClientExtensions.cs" />
     <Compile Include="MediaTypes.cs" />
     <Compile Include="MessageReceiverBase.cs" />
     <Compile Include="MessageSenderWrapper.cs" />

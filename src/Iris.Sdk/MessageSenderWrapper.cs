@@ -16,11 +16,22 @@ namespace Iris.Sdk
             this.clientChannel = clientChannel;
         }
 
-        public Task SendMessageAsync(string content)
+        public Task SendMessageAsync(string content, string to)
         {
             var message = new Message
             {
-                Content = new PlainText { Text = content }
+                To = Node.Parse(to),
+                Content = CreatePlainTextContent(content)
+            };
+            return clientChannel.SendMessageAsync(message);
+        }
+
+        public Task SendMessageAsync(string content, Node to)
+        {
+            var message = new Message
+            {
+                To = to,
+                Content = CreatePlainTextContent(content)
             };
             return clientChannel.SendMessageAsync(message);
         }
@@ -29,5 +40,7 @@ namespace Iris.Sdk
         {
             return clientChannel.SendMessageAsync(message);
         }
+
+        static PlainText CreatePlainTextContent(string content) => new PlainText { Text = content };
     }
 }

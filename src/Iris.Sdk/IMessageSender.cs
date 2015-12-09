@@ -6,6 +6,7 @@ namespace Iris.Sdk
     public interface IMessageSender
     {
         Task SendMessageAsync(Message message);
-        Task SendMessageAsync(string content);
+        Task SendMessageAsync(string content, string to);
+        Task SendMessageAsync(string content, Node to);
     }
 }

@@ -24,3 +24,14 @@ class DefaultMessageReceiver : MessageReceiverBase
     }
 }
 ```
+
+To send a message, after starting the client, just call:
+
+```c#
+await client.MessageSender.SendMessageAsync("Hello, world", to: "user");
+```
+
+Or even simpler (by means of an included extension method):
+```c#
+await client.SendMessageAsync("Hello, world", to: "user");
+```

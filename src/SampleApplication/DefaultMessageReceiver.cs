@@ -10,7 +10,7 @@ namespace SampleApplication
         public async override Task ReceiveAsync(Message message)
         {
             Console.WriteLine(message.Content.ToString());
-            await Sender.SendMessageAsync("Obrigado pela sua mensagem");
+            await Sender.SendMessageAsync("Obrigado pela sua mensagem", message.From.Name);
         }
     }
 }
