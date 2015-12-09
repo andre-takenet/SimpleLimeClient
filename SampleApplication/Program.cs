@@ -24,6 +24,11 @@ namespace SampleApplication
             Console.WriteLine("Press any key to stop");
 
             var endingTask = Task.WhenAny(execution, WaitKeyAsync()).Result;
+
+            if (endingTask != execution)
+            {
+                client.StopAsync().Wait();
+            }
         }
 
         static Task<char> WaitKeyAsync()

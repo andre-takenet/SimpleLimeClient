@@ -32,7 +32,7 @@ namespace Iris.Sdk
 
         public IrisClient(string hostname) : this()
         {
-            this.endpoint = new Uri($"tcp://{hostname}:55321");
+            this.endpoint = new Uri($"net.tcp://{hostname}:55321");
         }
 
         public IrisClient UsingAccount(string login, string password)
